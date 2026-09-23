@@ -73,7 +73,7 @@ def fallback_plan(user_request: str) -> DirectorPlan:
     return DirectorPlan(
         title=text[:60],
         reference_summary="(Claude not configured - reference was not analyzed.)",
-        generation_prompt=f"{text}. Cinematic lighting, rich detail, smooth natural motion, high production value.",
+        generation_prompt=f"{text.rstrip('.!')}. Cinematic lighting, rich detail, smooth natural motion, high production value.",
         preview_look=look,
         notes="Set ANTHROPIC_API_KEY to have Claude study the reference video and write a richer prompt.",
         source="fallback",

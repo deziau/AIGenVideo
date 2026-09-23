@@ -51,3 +51,7 @@ def test_refusal_is_reported():
 def test_fallback_plan_picks_look_from_text():
     assert fallback_plan("make it a watercolor dream").preview_look == "watercolor"
     assert fallback_plan("space opera").preview_look == "cinematic"
+
+
+def test_fallback_prompt_has_single_period():
+    assert ".." not in fallback_plan("Cyberpunk neon night.").generation_prompt
