@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AIGenVideo Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">AIGenVideo <span>Studio</span></div>
+    <div id="engines" class="engines"></div>
+  </header>
+
+  <main>
+    <nav class="tabs" role="tablist">
+      <button role="tab" class="tab active" data-tab="create" aria-selected="true">Create from reference</button>
+      <button role="tab" class="tab" data-tab="stylize" aria-selected="false">Cartoonize / Paint</button>
+    </nav>
+
+    <!-- Mode 1: reference video + text -> new video -->
+    <section id="create" class="panel active">
+      <p class="lead">Upload a reference video for motion and framing, then describe the video you want. Claude studies the reference and writes the prompt, and a video model renders the new video.</p>
+      <form id="create-form" class="grid">
+        <div class="col">
+          <label class="drop" data-input="create-video">
+            <input id="create-video" name="video" type="file" accept="video/*" required hidden>
+            <video class="drop-preview" muted loop playsinline hidden></video>
+            <span class="drop-hint"><strong>Drop reference video</strong><br>or click to browse</span>
+          </label>
+        </div>
+        <div class="col">
+          <label for="prompt" class="field-label">What should the new video look like?</label>
+          <textarea id="prompt" name="prompt" rows="7" maxlength="4000" required
+            placeholder="e.g. Turn this city walk into a neon-soaked cyberpunk night: rain-slick streets, holographic signs, flying cars overhead, moody blue and magenta light."></textarea>
+          <div class="chips" id="prompt-ideas">
+            <button type="button" class="chip">Cyberpunk neon night</button>
+            <button type="button" class="chip">Studio Ghibli-style anime</button>
+            <button type="button" class="chip">Epic fantasy, golden hour</button>
+            <button type="button" class="chip">Underwater dreamscape</button>
+            <button type="button" class="chip">1970s film, warm grain</button>
+          </div>
+          <button class="primary" type="submit">Generate video</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Mode 2: cartoonize / paint -->
+    <section id="stylize" class="panel">
+      <p class="lead">Turn any video into a cartoon or a painting. This runs on your server frame by frame and keeps the original audio.</p>
+      <form id="stylize-form" class="grid">
+        <div class="col">
+          <label class="drop" data-input="stylize-video">
+            <input id="stylize-video" name="video" type="file" accept="video/*" required hidden>
+            <video class="drop-preview" muted loop playsinline hidden></video>
+            <span class="drop-hint"><strong>Drop a video</strong><br>or click to browse</span>
+          </label>
+        </div>
+        <div class="col">
+          <span class="field-label">Style</span>
+          <div id="styles" class="styles"></div>
+          <label class="field-label" for="strength">Strength <output id="strength-out">0.6</output></label>
+          <input id="strength" name="strength" type="range" min="0" max="1" step="0.05" value="0.6">
+          <label class="field-label" for="smoothing">Flicker smoothing <output id="smoothing-out">0.35</output></label>
+          <input id="smoothing" name="smoothing" type="range" min="0" max="0.9" step="0.05" value="0.35">
+          <div class="row">
+            <button class="secondary" type="button" id="preview-btn">Preview a frame</button>
+            <button class="primary" type="submit">Stylize video</button>
+          </div>
+          <img id="frame-preview" class="frame-preview" alt="Stylized frame preview" hidden>
+        </div>
+      </form>
+    </section>
+
+    <!-- Shared job progress + result -->
+    <section id="job" class="job" hidden>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <p id="job-msg" class="job-msg"></p>
+      <div id="plan" class="plan" hidden></div>
+      <div id="result" class="result" hidden>
+        <video id="result-video" controls playsinline></video>
+        <a id="download" class="primary link" download>Download MP4</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
